@@ -1,7 +1,8 @@
 package com.techelevator;
 
-import java.io.File;
-import java.io.FileNotFoundException;
+import java.io.*;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 public class VendingMachine extends FoodItem {
@@ -9,6 +10,11 @@ public class VendingMachine extends FoodItem {
     private Map<String, Stack> products;
     private double vendingBalance;
     private double machineBalance = 0;
+    DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
+    LocalDateTime now = LocalDateTime.now();
+    private String gaveChange = "GIVE CHANGE:";
+    File auditFile = new File("log.txt");
+
 
 
     public void startMachine() throws FileNotFoundException {
@@ -71,7 +77,8 @@ public class VendingMachine extends FoodItem {
         }return "";
     }
 
-    public void chooseItem(String itemCode) {
+    public void chooseItem(String itemCode, Double preBalance) {
+        preBalance = machineBalance;
         for(Map.Entry<String, Stack> entry : products.entrySet()) {
             String key = entry.getKey();
             FoodItem firstItem = (FoodItem)entry.getValue().peek();
@@ -80,6 +87,7 @@ public class VendingMachine extends FoodItem {
                 System.out.println(firstItem.getName()  + ", " + firstItem.getCost());
                 System.out.println(firstItem.getFoodMessage());
                 machineBalance -= firstItem.getCost();
+                audit(firstItem.getName() + " " + key, preBalance, getMachineBalance());
             }
         }
     }
@@ -100,6 +108,7 @@ public class VendingMachine extends FoodItem {
         int countQuarters = 0;
         int countNickels = 0;
         int countDimes = 0;
+        Double preChange = machineBalance;
 
         while(machineBalance >= 0.25) {
             machineBalance -= 0.25;
@@ -115,6 +124,7 @@ public class VendingMachine extends FoodItem {
             countNickels++;
         }
         System.out.println("Change: \nQuarters: " + countQuarters + "\nDimes: " + countDimes + "\nNickels: " + countNickels);
+        audit(gaveChange, preChange, getMachineBalance());
     }
 
 
@@ -132,6 +142,21 @@ public class VendingMachine extends FoodItem {
 
     public void addToMachineBalance(double amountToAdd) {
         machineBalance += amountToAdd;
+
+    }
+
+    public void audit(String action, Double startingMoney, Double endingMoney) {
+
+
+
+        try(PrintWriter writer = new PrintWriter(new FileWriter(auditFile, true))) {
+            writer.println((dtf.format(now) + " " + action + " /" + startingMoney + " /" + endingMoney));
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
     }
 
 

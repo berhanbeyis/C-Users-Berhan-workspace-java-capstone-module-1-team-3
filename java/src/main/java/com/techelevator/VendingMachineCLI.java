@@ -36,9 +36,11 @@ public class VendingMachineCLI {
 	boolean boolOne = true;
 	boolean boolTwo = true;
 	boolean boolThree = true;
-	VendingMachine vending= new VendingMachine();
+	VendingMachine vending = new VendingMachine();
 	BankAccoutn myAccount = new BankAccoutn();
 	Scanner scan = new Scanner(System.in);
+	private String fedMoney = "FEED MONEY:";
+
 
 	public VendingMachineCLI(Menu menu) {
 		this.menu = menu;
@@ -73,9 +75,12 @@ public class VendingMachineCLI {
 							System.out.println("Current money provided: " + vending.getMachineBalance());
 							String choiceThree = (String) menu.getChoiceFromOptions(FEED_OPTIONS);
 
+							Double preMoney = vending.getMachineBalance();
+
 							if(choiceThree.equals(ONE_DOLLAR)) {
 								vending.addToMachineBalance(1);
 								myAccount.withdraw(1);
+								vending.audit(fedMoney, preMoney, vending.getMachineBalance());
 
 
 							} else if (choiceThree.equals(TWO_DOLLARS)) {
@@ -83,18 +88,21 @@ public class VendingMachineCLI {
 								//withdraw from bank
 								vending.addToMachineBalance(2);
 								myAccount.withdraw(2);
+								vending.audit(fedMoney, preMoney, vending.getMachineBalance());
 
 							} else if(choiceThree.equals(FIVE_DOLLARS)) {
 								//add five dollars
 								//withdraw from bank
 								vending.addToMachineBalance(5);
 								myAccount.withdraw(5);
+								vending.audit(fedMoney, preMoney, vending.getMachineBalance());
 
 							} else if(choiceThree.equals(TEN_DOLLARS)) {
 								//add ten dollars
 								//withdraw from bank
 								vending.addToMachineBalance(10);
 								myAccount.withdraw(10);
+								vending.audit(fedMoney, preMoney, vending.getMachineBalance());
 
 							} else if(choiceThree.equals(STOP)) {
 								boolThree = false;
@@ -112,7 +120,7 @@ public class VendingMachineCLI {
 						if(vending.isSoldOut(vendingCode)) {
 							boolTwo = false;
 						} else {
-							vending.chooseItem(vendingCode);
+							vending.chooseItem(vendingCode, vending.getMachineBalance());
 						}
 						vending.getMachineBalance();
 
