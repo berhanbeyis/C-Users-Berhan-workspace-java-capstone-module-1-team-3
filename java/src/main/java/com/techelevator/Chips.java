@@ -6,4 +6,8 @@ public class Chips extends FoodItem {
         super(name, cost);
     }
 
+    @Override
+    public String getFoodMessage() {
+        return "Crunch Crunch, Yum!";
+    }
 }

@@ -8,22 +8,12 @@ public class VendingMachine extends FoodItem {
 
     private Map<String, Stack> products;
     private double vendingBalance;
-
-
-//    public VendingMachine (Map<String, Stack> products) {
-//        this.products = products;
-//    }
-
-
-
+    private double machineBalance = 0;
 
 
     public void startMachine() throws FileNotFoundException {
         File productList = new File("vendingmachine.csv");
         Scanner fileScanner = new Scanner(productList);
-
-
-
 
 
 
@@ -73,32 +63,58 @@ public class VendingMachine extends FoodItem {
 
     public  String displayItems() {
 
-//        Set<String> keys = products.keySet();
-
         for (Map.Entry<String,Stack> entry : products.entrySet()) {
-            //FoodItem food = new FoodItem("blah", 2);
-            //FoodItem food = entry.
             String key = entry.getKey();
             FoodItem firstItem = (FoodItem)entry.getValue().peek();
-//            firstItem.getClass().getSimpleName();
             System.out.println(key +" "+ firstItem.getName() +" "+ firstItem.getCost() );
 
-
-//
-//            List<Stack> listOfStacks = new ArrayList<>();
-//
-//
-//             for(int i = 0; i < products.size(); i++){
-//                 listOfStacks.add(products.get(i));
-//
-//             }
-//             for(int i = 0; i < listOfStacks.size(); i ++){
-//                 listOfStacks.get(i).get
-//             }
-//
-
-
         }return "";
+    }
+
+    public void chooseItem(String itemCode) {
+        for(Map.Entry<String, Stack> entry : products.entrySet()) {
+            String key = entry.getKey();
+            FoodItem firstItem = (FoodItem)entry.getValue().peek();
+
+            if(key.equals(itemCode)) {
+                System.out.println(firstItem.getName()  + ", " + firstItem.getCost());
+                System.out.println(firstItem.getFoodMessage());
+                machineBalance -= firstItem.getCost();
+            }
+        }
+    }
+
+    public boolean isSoldOut(String itemCode) {
+        for (Map.Entry<String, Stack> entry : products.entrySet()) {
+            Stack stackName = entry.getValue();
+
+            if (stackName.isEmpty()) {
+                System.out.println("Item is sold out!");
+                return true; //true for sold out
+            }
+        }
+        return false; // not sold out
+    }
+
+    public void giveChange() {
+        int countQuarters = 0;
+        int countNickels = 0;
+        int countDimes = 0;
+
+        while(machineBalance >= 0.25) {
+            machineBalance -= 0.25;
+            countQuarters++;
+        }
+        while(machineBalance >= 0.10) {
+            machineBalance -= 0.10;
+            countDimes++;
+
+        }
+        while(machineBalance >= 0.05) {
+            machineBalance -= 0.05;
+            countNickels++;
+        }
+        System.out.println("Change: \nQuarters: " + countQuarters + "\nDimes: " + countDimes + "\nNickels: " + countNickels);
     }
 
 
@@ -109,6 +125,16 @@ public class VendingMachine extends FoodItem {
     public double getVendingBalance() {
         return vendingBalance;
     }
+
+    public double getMachineBalance() {
+        return machineBalance;
+    }
+
+    public void addToMachineBalance(double amountToAdd) {
+        machineBalance += amountToAdd;
+    }
+
+
 
 }
 
