@@ -2,35 +2,30 @@ package com.techelevator;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Scanner;
-import java.util.Stack;
+import java.util.*;
 
-public class VendingMachine {
+public class VendingMachine extends FoodItem {
 
     private Map<String, Stack> products;
-
-
-
     private double vendingBalance;
 
 
-    public VendingMachine (Map<String, Stack> products) {
-        this.products = products;
-    }
+//    public VendingMachine (Map<String, Stack> products) {
+//        this.products = products;
+//    }
 
-    public Map<String, Stack> getProducts() {
-        return products;
-    }
 
-    public double getVendingBalance() {
-        return vendingBalance;
-    }
+
+
 
     public void startMachine() throws FileNotFoundException {
         File productList = new File("vendingmachine.csv");
         Scanner fileScanner = new Scanner(productList);
+
+
+
+
+
 
         Map<String, Stack> newMap = new HashMap<>();
 
@@ -43,7 +38,7 @@ public class VendingMachine {
                 for (int i = 0; i <= 5; i++) {
                     chipsStack.push(chip);
                 }
-                newMap.put(arr[0], chipsStack);
+                newMap.put(arr[0], chipsStack);  //(A1,{ Chips, chips chips chips chips })
 
             }
             else if (arr[3].equals("Gum")) {
@@ -70,9 +65,49 @@ public class VendingMachine {
                 }
                 newMap.put(arr[0], candyStack);
             }
+            this.products = newMap;
 
         }
 
+    }
+
+    public  String displayItems() {
+
+//        Set<String> keys = products.keySet();
+
+        for (Map.Entry<String,Stack> entry : products.entrySet()) {
+            //FoodItem food = new FoodItem("blah", 2);
+            //FoodItem food = entry.
+            String key = entry.getKey();
+            FoodItem firstItem = (FoodItem)entry.getValue().peek();
+//            firstItem.getClass().getSimpleName();
+            System.out.println(key +" "+ firstItem.getName() +" "+ firstItem.getCost() );
+
+
+//
+//            List<Stack> listOfStacks = new ArrayList<>();
+//
+//
+//             for(int i = 0; i < products.size(); i++){
+//                 listOfStacks.add(products.get(i));
+//
+//             }
+//             for(int i = 0; i < listOfStacks.size(); i ++){
+//                 listOfStacks.get(i).get
+//             }
+//
+
+
+        }return "";
+    }
+
+
+    public Map<String, Stack> getProducts() {
+        return products;
+    }
+
+    public double getVendingBalance() {
+        return vendingBalance;
     }
 
 }
