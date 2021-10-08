@@ -1,6 +1,6 @@
 package com.techelevator;
 
-public class BankAccoutn { //yes we know I spelled it wrong
+public class BankAccount { //yes we know I spelled it wrong
 
     private double balance = 100;
 

@@ -1,8 +1,8 @@
 package com.techelevator;
 
-public class Chips extends FoodItem {
+public class Chip extends FoodItem {
 
-    public Chips (String name, double cost) {
+    public Chip(String name, double cost) {
         super(name, cost);
     }
 

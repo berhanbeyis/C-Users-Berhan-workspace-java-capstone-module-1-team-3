@@ -3,10 +3,7 @@ package com.techelevator;
 import com.techelevator.view.Menu;
 
 import java.io.FileNotFoundException;
-import java.nio.channels.SelectableChannel;
-import java.util.Map;
 import java.util.Scanner;
-import java.util.Stack;
 
 public class VendingMachineCLI {
 
@@ -37,7 +34,7 @@ public class VendingMachineCLI {
 	boolean boolTwo = true;
 	boolean boolThree = true;
 	VendingMachine vending = new VendingMachine();
-	BankAccoutn myAccount = new BankAccoutn();
+	BankAccount myAccount = new BankAccount();
 	Scanner scan = new Scanner(System.in);
 	private String fedMoney = "FEED MONEY:";
 

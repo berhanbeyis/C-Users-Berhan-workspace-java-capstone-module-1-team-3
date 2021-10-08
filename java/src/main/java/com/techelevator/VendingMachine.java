@@ -29,8 +29,8 @@ public class VendingMachine extends FoodItem {
             String[] arr = new String[4];
             arr = fileScanner.nextLine().split("[|]");
             if (arr[3].equals("Chip")) {
-                Chips chip = new Chips(arr[1], Double.parseDouble(arr[2]));
-                Stack<Chips> chipsStack = new Stack<>();
+                Chip chip = new Chip(arr[1], Double.parseDouble(arr[2]));
+                Stack<Chip> chipsStack = new Stack<>();
                 for (int i = 0; i <= 5; i++) {
                     chipsStack.push(chip);
                 }
