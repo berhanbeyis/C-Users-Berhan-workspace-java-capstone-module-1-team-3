@@ -60,21 +60,21 @@ public class VendingMachineCLI {
 				//print balance in machine
 //				System.out.println(vending.getVendingBalance());
 
-				while(boolTwo) {
+				while (boolTwo) {
 					System.out.println("Current money provided: " + vending.getMachineBalance());
 
 					String choiceTwo = (String) menu.getChoiceFromOptions(SECOND_MENU_OPTIONS);
 
 
-					if(choiceTwo.equals(FEED_MONEY)) {
+					if (choiceTwo.equals(FEED_MONEY)) {
 						//feed money here
-						while(boolThree) {
+						while (boolThree) {
 							System.out.println("Current money provided: " + vending.getMachineBalance());
 							String choiceThree = (String) menu.getChoiceFromOptions(FEED_OPTIONS);
 
 							Double preMoney = vending.getMachineBalance();
 
-							if(choiceThree.equals(ONE_DOLLAR)) {
+							if (choiceThree.equals(ONE_DOLLAR)) {
 								vending.addToMachineBalance(1);
 								myAccount.withdraw(1);
 								vending.audit(fedMoney, preMoney, vending.getMachineBalance());
@@ -87,21 +87,21 @@ public class VendingMachineCLI {
 								myAccount.withdraw(2);
 								vending.audit(fedMoney, preMoney, vending.getMachineBalance());
 
-							} else if(choiceThree.equals(FIVE_DOLLARS)) {
+							} else if (choiceThree.equals(FIVE_DOLLARS)) {
 								//add five dollars
 								//withdraw from bank
 								vending.addToMachineBalance(5);
 								myAccount.withdraw(5);
 								vending.audit(fedMoney, preMoney, vending.getMachineBalance());
 
-							} else if(choiceThree.equals(TEN_DOLLARS)) {
+							} else if (choiceThree.equals(TEN_DOLLARS)) {
 								//add ten dollars
 								//withdraw from bank
 								vending.addToMachineBalance(10);
 								myAccount.withdraw(10);
 								vending.audit(fedMoney, preMoney, vending.getMachineBalance());
 
-							} else if(choiceThree.equals(STOP)) {
+							} else if (choiceThree.equals(STOP)) {
 								boolThree = false;
 							}
 
@@ -114,15 +114,12 @@ public class VendingMachineCLI {
 						System.out.println("Enter Product Code>>> ");
 						String vendingCode = scan.nextLine();
 
-						if(vending.isSoldOut(vendingCode)) {
+						if (vending.isSoldOut(vendingCode)) {
 							boolTwo = false;
 						} else {
 							vending.chooseItem(vendingCode, vending.getMachineBalance());
 						}
 						vending.getMachineBalance();
-
-
-
 
 					} else if (choiceTwo.equals(FINISH_TRANSACTION)) {
 						//finish transaction, give change
@@ -130,14 +127,10 @@ public class VendingMachineCLI {
 						myAccount.deposit(vending.getMachineBalance());
 						boolThree = false;
 						boolTwo = false;
-
 					}
-
-
 				}
 
-
-			}else if (choice.equals(MAIN_MENU_EXIT)){
+			} else if (choice.equals(MAIN_MENU_EXIT)) {
 				System.exit(1);
 
 			}
@@ -148,8 +141,8 @@ public class VendingMachineCLI {
 		Menu menu = new Menu(System.in, System.out);
 		VendingMachineCLI cli = new VendingMachineCLI(menu);
 		cli.run();
-	VendingMachine vending= new VendingMachine();
-	vending.startMachine();
+		VendingMachine vending = new VendingMachine();
+		vending.startMachine();
 		vending.displayItems();
 
 

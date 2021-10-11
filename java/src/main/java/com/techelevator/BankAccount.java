@@ -2,7 +2,7 @@ package com.techelevator;
 
 public class BankAccount { //yes we know I spelled it wrong
 
-    private double balance = 100;
+    private double balance = 10000;
 
     public double getBalance() {
         return balance;
@@ -14,7 +14,12 @@ public class BankAccount { //yes we know I spelled it wrong
 
 
     public void withdraw(double amountToWithdraw) {
-        balance -= amountToWithdraw;
+        if (amountToWithdraw < balance) {
+            balance -= amountToWithdraw;
+        } else if( amountToWithdraw>balance){
+            System.out.println("Not enough money in bank Account");
+        }
+
     }
 
     public void deposit(double amountToDeposit) {

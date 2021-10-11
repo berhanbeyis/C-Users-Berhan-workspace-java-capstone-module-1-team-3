@@ -7,7 +7,7 @@ import java.util.*;
 
 public class VendingMachine extends FoodItem {
 
-    private Map<String, Stack> products;
+    private Map<String, Stack> products = new LinkedHashMap<>();
     private double vendingBalance;
     private double machineBalance = 0;
     DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
@@ -16,14 +16,12 @@ public class VendingMachine extends FoodItem {
     File auditFile = new File("log.txt");
 
 
-
     public void startMachine() throws FileNotFoundException {
         File productList = new File("vendingmachine.csv");
         Scanner fileScanner = new Scanner(productList);
 
 
-
-        Map<String, Stack> newMap = new HashMap<>();
+        Map<String, Stack> newMap = new LinkedHashMap<>();
 
         while (fileScanner.hasNext()) {
             String[] arr = new String[4];
@@ -36,8 +34,7 @@ public class VendingMachine extends FoodItem {
                 }
                 newMap.put(arr[0], chipsStack);  //(A1,{ Chips, chips chips chips chips })
 
-            }
-            else if (arr[3].equals("Gum")) {
+            } else if (arr[3].equals("Gum")) {
                 Gum gum = new Gum(arr[1], Double.parseDouble(arr[2]));
                 Stack<Gum> gumStack = new Stack<>();
                 for (int i = 0; i <= 5; i++) {
@@ -67,27 +64,39 @@ public class VendingMachine extends FoodItem {
 
     }
 
-    public  String displayItems() {
+    public String displayItems() {
 
-        for (Map.Entry<String,Stack> entry : products.entrySet()) {
+        for (Map.Entry<String, Stack> entry : products.entrySet()) {
             String key = entry.getKey();
-            FoodItem firstItem = (FoodItem)entry.getValue().peek();
-            System.out.println(key +" "+ firstItem.getName() +" "+ firstItem.getCost() );
+            Stack newStack = entry.getValue();
 
-        }return "";
+            if (newStack.empty()) {
+                System.out.println(key + " Sold Out");
+            } else {
+                FoodItem firstItem = (FoodItem) entry.getValue().peek();
+//            FoodItem firstItem = (FoodItem)entry.getValue().peek();
+                System.out.println(key + " " + firstItem.getName() + " " + firstItem.getCost());
+            }
+
+        }
+        return "";
     }
 
     public void chooseItem(String itemCode, Double preBalance) {
         preBalance = machineBalance;
-        for(Map.Entry<String, Stack> entry : products.entrySet()) {
+        for (Map.Entry<String, Stack> entry : products.entrySet()) {
             String key = entry.getKey();
-            FoodItem firstItem = (FoodItem)entry.getValue().peek();
-
-            if(key.equals(itemCode)) {
-                System.out.println(firstItem.getName()  + ", " + firstItem.getCost());
+            FoodItem firstItem = (FoodItem) entry.getValue().peek();
+            Stack theStack = entry.getValue();
+            if (key.equals(itemCode) && firstItem.getCost() < machineBalance) {
+                System.out.println(firstItem.getName() + ", " + firstItem.getCost());
                 System.out.println(firstItem.getFoodMessage());
                 machineBalance -= firstItem.getCost();
+                theStack.remove(0);
                 audit(firstItem.getName() + " " + key, preBalance, getMachineBalance());
+            } else if (key.equals(itemCode) && firstItem.getCost() > machineBalance) {
+                double needMore = firstItem.getCost() - machineBalance;
+                System.out.println("Not enought money, please enter $" + needMore + ".");
             }
         }
     }
@@ -110,16 +119,16 @@ public class VendingMachine extends FoodItem {
         int countDimes = 0;
         Double preChange = machineBalance;
 
-        while(machineBalance >= 0.25) {
+        while (machineBalance >= 0.25) {
             machineBalance -= 0.25;
             countQuarters++;
         }
-        while(machineBalance >= 0.10) {
+        while (machineBalance >= 0.10) {
             machineBalance -= 0.10;
             countDimes++;
 
         }
-        while(machineBalance >= 0.05) {
+        while (machineBalance >= 0.05) {
             machineBalance -= 0.05;
             countNickels++;
         }
@@ -148,8 +157,7 @@ public class VendingMachine extends FoodItem {
     public void audit(String action, Double startingMoney, Double endingMoney) {
 
 
-
-        try(PrintWriter writer = new PrintWriter(new FileWriter(auditFile, true))) {
+        try (PrintWriter writer = new PrintWriter(new FileWriter(auditFile, true))) {
             writer.println((dtf.format(now) + " " + action + " /" + startingMoney + " /" + endingMoney));
 
         } catch (IOException e) {
@@ -158,7 +166,6 @@ public class VendingMachine extends FoodItem {
 
 
     }
-
 
 
 }
